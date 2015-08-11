@@ -24,6 +24,10 @@ class DefaultTest:
 
     def init(self):
         pass
+    def get_root_folder(self):
+        root=os.path.dirname(os.path.abspath(__file__))
+        root=os.path.join(root, "../")
+        return root
 
     def setup(self, args):
         """
@@ -38,11 +42,13 @@ class DefaultTest:
         """
         cli_args are then passed to 
         """
+        self.ns3folder=ns3folder
         timeout = None
         
         args = self.parser.parse_args(cli_args)
-        args, unknown = self.parser.parse_known_args(cli_args)
-
+        # args, unknown = self.parser.parse_known_args(cli_args)
+        args_dict = vars(args)
+        self.setup(**args_dict)
         # os.path.exists("%s/waf" % (ns3folder))
         if args.debug:
             cmd = "./waf --run test-runner --command-template=\"gdb -ex 'run --suite={suite} {verbose} {tofile}' --args %s \" "
@@ -84,11 +90,14 @@ class DefaultTest:
         if ret:
             print("ERROR: command returned error code %d" % ret)
             # os.system("truncate --size=100000 %s" % (args.out,))
-            exit(1)
+            # exit(1)
 
-        self.postprocess(args)
+        self.postprocess(**args_dict)
 
         print("Executed Command:\n%s" % cmd)
+
+    def get_ns_folder(self):
+        return self.ns3folder
 
 class Test(DefaultTest):
     
@@ -100,12 +109,24 @@ class Test(DefaultTest):
         if graph:
             # TODO check it's ok
             os.system("./clean.sh")
+            #os.rmdir("%s/source" % self.get_ns_folder())
+            #os.remove() #same as unlink
 
     # def run(self):
 
 
     def postprocess(self, graph, **kwargs):
-        pass
+
+        if graph:
+            cwd= self.get_ns_folder() 
+            ns3testing=self.get_root_folder()
+            plot_folder=os.path.join(ns3testing, "./plots")
+            # plot_folder=ns3testing
+            os.environ["GNUPLOT_LIB"] = plot_folder
+            cmd=os.path.join(ns3testing ,"./draw_plots.sh")
+            ret = subprocess.call(cmd, cwd=cwd)
+            
+            print("Launched command \n:%s\nFrom working directory %s" % (cmd, cwd))
 
 # Test test
 

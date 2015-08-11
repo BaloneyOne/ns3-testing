@@ -22,17 +22,14 @@ available_suites = [
 
 
 # type=argparse.FileType('w'),
-parser = argparse.ArgumentParser(description="Helper to debug mptcp")
+# parser = argparse.ArgumentParser(description="Helper to debug mptcp")
 
-parser.add_argument("suite", choices=available_suites, help="Launch gdb")
-# parser.add_argument("--debug", '-d', action="store_true", help="Launch gdb")
-# parser.add_argument("--out", "-o", default="", nargs='?', help="redirect ns3 results output to a file")
-# parser.add_argument("--verbose", "-v", action="store_const", default="", const="--verbose", help="to enable more output")
-
-args, unknown_args = parser.parse_known_args()
+# parser.add_argument("suite", choices=available_suites, help="Launch gdb")
+# args, unknown_args = parser.parse_known_args()
 
 ns3folder="/home/teto/ns3off"
-suite = args.suite.replace('-', '_')
+suite = sys.argv[1]
+suite = suite.replace('-', '_')
 
 print("Suite=%s"% suite)
 # mod = importlib.import_module('tests.mptcp_tcp')
@@ -40,7 +37,7 @@ from tests.mptcp_tcp import Test
 # mod = __import__('tests.mptcp-tcp')
 # test = DefaultTest()
 # todo it later
-if os.path.exists("tests/%s" % args.suite):
+if os.path.exists("tests/%s" % suite):
     # import tests.(args.suite).
     test = DefaultTest()
 else:
