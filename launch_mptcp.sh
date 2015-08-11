@@ -2,14 +2,7 @@
 #http://unix.stackexchange.com/questions/20035/how-to-add-newlines-into-variables-in-bash-script
 read -r -d '' ns_log<<EOF
 *=error|warn|prefix_node|prefix_func
-:PointToPointNetDevice
-:ClockTest
-:ClockPerfect
-:Clock
-:Node
-:PointToPointChannel
-:DropTailQueue
-:MpTcpMultiSuite
+:MpTcpTestSuite
 :MpTcpSchedulerRoundRobin
 :Config
 :TcpSocket
@@ -20,8 +13,17 @@ read -r -d '' ns_log<<EOF
 :TcpTxBuffer
 :TcpHeader=*
 :TcpL4Protocol
-:TraceHelper:PointToPointHelper
+:TcpTraceHelper
+:Socket
 EOF
+#:TraceHelper:PointToPointHelper
+#:ClockTest
+#:ClockPerfect
+#:Clock
+#:PointToPointNetDevice
+#:PointToPointChannel
+#:DropTailQueue
+#:Node
 #NS_LOG += ":AttributeValue"
 #NS_LOG += ":MpTcpSchedulerRoundRobin"
 # NS_LOG += ":SimpleNetDevice"
@@ -31,7 +33,7 @@ EOF
 # NS_LOG += ":TypeId" # to look for AddTraceSource
 #NS_LOG += ":MpTcpMapping"
 # NS_LOG += ":PcapFile"
-# NS_LOG=":MpTcpTestSuite=*|prefix_func:Socket=*"
+#prefix_func:Socket=*"
 #NS_LOG += ":Ipv4EndPoint"
 # NS_LOG += ":Ipv4EndPointDemux"
 #NS_LOG="*"

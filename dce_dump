@@ -4,12 +4,14 @@ if [ $# -lt 1 ]; then
 	exit 1
 fi
 
-
-folder="files-$1/var/log/*/"
+folder="$1"
+if [ ! -d "$dir" ]; then
+   dir="files-$1/var/log/*/"
+fi
 
 cli=""
 for i in $(ls $folder); do
-	cli="$cli <( echo '==== $i' ) $folder$i"
+	cli="$cli <( echo '==== $folder/$i' ) $folder$i"
 done 
 
 eval "cat $cli | less"

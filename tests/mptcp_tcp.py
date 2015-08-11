@@ -108,8 +108,10 @@ class Test(DefaultTest):
     def setup(self, graph, **kwargs):
         if graph:
             # TODO check it's ok
-            os.system("./clean.sh")
-            #os.rmdir("%s/source" % self.get_ns_folder())
+            cmd= "%s/clean.sh" % self.get_root_folder()
+            subprocess.call(cmd, cwd=self.get_ns_folder())
+            # os.rmdir("%s/source" % self.get_ns_folder())
+            # os.rmdir("%s/source" % self.get_ns_folder())
             #os.remove() #same as unlink
 
     # def run(self):
