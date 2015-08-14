@@ -15,6 +15,8 @@ read -r -d '' ns_log<<EOF
 :TcpL4Protocol
 :TcpTraceHelper
 :Socket
+:MpTcpMapping
+:MpTcpMappingTestSuite
 EOF
 #:TraceHelper:PointToPointHelper
 #:ClockTest
