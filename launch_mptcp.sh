@@ -7,6 +7,7 @@ read -r -d '' ns_log<<EOF
 :Config
 :TcpSocket
 :MpTcpSubflow:MpTcpSocketBase
+:TcpSocketBase
 :MpTcpCrypto
 :TcpTestSuite
 :TcpRxBuffer
