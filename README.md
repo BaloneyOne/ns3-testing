@@ -1,5 +1,8 @@
 # ns3-testing
 
+Official repository at:
+https://github.com/teto/ns3-testing
+
 This repository hosts wrappers around the ns3 testing system in order to ease some common operations.
 
 For instance, it can load specific command line arguments if the chosen test supports extra arguments.
@@ -12,3 +15,17 @@ For instance, the mptcp-tcp test will:
 3. Generate plots based on the newly saved statistics
 
 Helper scripts to help debug ns3 applications (wrappers)
+
+
+# How to use ?
+You need to setup in test_ns3.py the variables:
+- ns3folder
+- dcefolder
+
+And that's all !
+The script relies on python's argparse library and as such should be self documented.
+
+Here is an example on how to launch an 'example' (replace by 'test' for a 'test')
+./test_ns3.py example dce-iperf-mptcp-mixed --clean --load-log=ns_log.txt
+
+For the ns_log.txt format, look at the one in this repository

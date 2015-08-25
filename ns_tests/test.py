@@ -28,12 +28,12 @@ class DefaultTest:
         self.type = type
 
         parser = argparse.ArgumentParser(description="Helper to debug mptcp")
-
+#  nargs='?',
         # parser.add_argument("program", choices=available_programs, help="Launch gdb")
         parser.add_argument("program", type=str, help="Launch gdb")
         parser.add_argument("--debug", '-d', action="store_true", help="Launch gdb")
-        parser.add_argument("--out", "-o", default="", nargs='?', help="redirect ns3 results output to a file")
-        # parser.add_argument("--load-log", "-l", default="", nargs='1', help="Load log from file")
+        parser.add_argument("--out", "-o", default="", action="store", help="redirect ns3 results output to a file")
+        parser.add_argument("--load-log", "-l", action="store", help="Load log from file")
 
         parser.add_argument("--clean", "-c", action="store_const", const=True,  help="Remove files that could be misinterpreted")
         # parser.add_argument("--verbose", "-v", action="store_const", default="", const="--verbose", help="to enable more output")
@@ -43,6 +43,18 @@ class DefaultTest:
 
     def init(self):
         pass
+
+    def load_log(self, filename):
+        """
+        Load NS_LOG from a file, return parsed value
+        """
+        ns_log = ''
+        with open(filename, 'r') as f:
+            for line in f.readlines():
+                if line.startswith('#'):
+                    continue
+                ns_log += line.strip()
+        return ns_log
 
     @staticmethod
     def is_dce():
@@ -99,9 +111,14 @@ class DefaultTest:
 
         # args = self.parser.parse_args(cli_args)
         args, unknown_args = self.parser.parse_known_args(cli_args)
-
+        
         args_dict = self._convert_args_into_dict(args)
         print(args_dict)
+        if args.load_log:
+            ns_log = self.load_log(args.load_log)
+            log.info("Setting NS_LOG to:\n%s" % ns_log)
+            os.environ['NS_LOG'] = ns_log
+
         log.debug("Just before running setup")
         self.setup(**args_dict)
         extra_params = "--suite=%s" % args.program if self.type == "test" else ""

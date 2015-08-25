@@ -1,8 +1,5 @@
-#!/bin/bash
-#http://unix.stackexchange.com/questions/20035/how-to-add-newlines-into-variables-in-bash-script
-read -r -d '' ns_log<<EOF
 *=error|warn|prefix_node|prefix_func
-:MpTcpTestSuite
+#:MpTcpTestSuite # tests are not supposed to have a logger
 :MpTcpSchedulerRoundRobin
 :Config
 :TcpSocket
@@ -18,7 +15,6 @@ read -r -d '' ns_log<<EOF
 :Socket
 :MpTcpMapping
 :MpTcpMappingTestSuite
-EOF
 #:TraceHelper:PointToPointHelper
 #:ClockTest
 #:ClockPerfect
@@ -40,8 +36,3 @@ EOF
 #NS_LOG += ":Ipv4EndPoint"
 # NS_LOG += ":Ipv4EndPointDemux"
 #NS_LOG="*"
-
-ns_log=${ns_log//[[:space:]]/}
-printf "%s" "$ns_log"
-export NS_LOG="$ns_log"
-python3 ./test_ns3.py $@
