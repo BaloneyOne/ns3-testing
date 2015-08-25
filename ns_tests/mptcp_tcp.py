@@ -10,9 +10,12 @@ class Test(test.DefaultTest):
     def init(self):
         self.parser.add_argument("--graph", "-g", action="store_true", help="Convert pcap to sqlite db and then plot")
 
+    def clean(self):
+        super().clean()
 
-    def setup(self, graph, **kwargs):
-        if graph:
+    def setup(self, **kwargs):
+        super().setup(**kwargs)
+        if kwargs.get('graph'):
             # TODO check it's ok
             cmd= "%s/clean.sh" % self.get_root_folder()
             subprocess.call(cmd, cwd=self.get_waf_directory())
@@ -23,9 +26,9 @@ class Test(test.DefaultTest):
     # def run(self):
 
 
-    def postprocess(self, graph, **kwargs):
+    def postprocess(self, *args, **kwargs):
 
-        if graph:
+        if kwargs.get('graph'):
             cwd= self.get_waf_directory() 
             ns3testing=self.get_root_folder()
             plot_folder=os.path.join(ns3testing, "./plots")

@@ -21,11 +21,6 @@ available_suites = [
 ]
 
 
-# type=argparse.FileType('w'),
-# parser = argparse.ArgumentParser(description="Helper to debug mptcp")
-
-# parser.add_argument("suite", choices=available_suites, help="Launch gdb")
-# args, unknown_args = parser.parse_known_args()
 
 ns3folder="/home/teto/ns3off"
 dce_folder="/home/teto/dce"
@@ -34,31 +29,45 @@ dce_folder="/home/teto/dce"
 parser = argparse.ArgumentParser(description="Helper to debug ns3/dce programs")
 
 # parser.add_argument("suite", choices=available_suites, help="Launch gdb")
-parser.add_argument("project", type=str, choices=["dce", "ns3"], help="To which project does the test/example belong")
+# parser.add_argument("project", type=str, choices=["dce", "ns3"], help="To which project does the test/example belong")
 # here it should be able to find on its own the type normally
 parser.add_argument("type", type=str, choices=["test", "example"], help="What kind of program do we have to launch")
 parser.add_argument("program", type=str, help="Name of the suite or exemple to run")
 
 args, unknown_args = parser.parse_known_args()
 
-working_directory = ns3folder if args.project == "ns3" else dce_folder
 
 suite = args.program
 suite = suite.replace('-', '_')
 
+
+"""
+Now we get to choose what kind of test to launch
+if example/test starts with 'dce' then it's a DCE test.
+if we can find a file with a name matching the program to launch, then we load it
+"""
+# from tests import Test
+import ns_tests.test as toto
+
+test_class = toto.DefaultTest
+if suite.startswith('dce'):
+   test_class = toto.DceDefaultTest 
 # mod = importlib.import_module('tests.mptcp_tcp')
-from tests.mptcp_tcp import Test
 # mod = __import__('tests.mptcp-tcp')
 # test = DefaultTest()
 # todo it later
 # todo get root folder
-if os.path.exists("tests/%s" % suite):
-    # import tests.(args.suite).
-    test = DefaultTest(working_directory, args.type)
-else:
-    test = Test(working_directory, args.type)
+# if os.path.exists("ns_tests/%s" % suite):
+    # #from tests.mptcp_tcp import Test
+    # # import tests.(args.suite).
+    # test_type = DefaultTest
+print(" class: ", dir(test_class))
+print(" class: ", toto.DefaultTest)
+working_directory = dce_folder if test_class.is_dce() else ns3folder 
 
+test = test_class ( working_directory, args.type)
 # assuming there are more
 # test.run(ns3folder, sys.argv[1:])
 # print(sys.argv)
-test.run(working_directory, [args.program] + unknown_args)
+#test.setup()
+test.run([args.program] + unknown_args)
