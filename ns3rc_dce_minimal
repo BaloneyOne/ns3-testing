@@ -1,0 +1,33 @@
+#! /usr/bin/env python
+# rename to .ns3rc and put in ns3 root folder before use
+# A list of the modules that will be enabled when ns-3 is run.
+# Modules that depend on the listed modules will be enabled also.
+#
+# All modules can be enabled by choosing 'all_modules'.
+#modules_enabled = ['all_modules']
+# point-to-point-layout needs to be included for netanim but why do I have netanim compilated ?
+modules_enabled = [
+'bridge',
+'mpi',
+'network',
+'internet',
+'core',
+'point-to-point',
+'point-to-point-layout',
+'applications',
+#'csma',
+#'wifi',
+
+# # needed by DCE
+'netanim', 
+'tap-bridge',
+'fd-net-device',
+'flow-monitor',
+'test',
+]
+
+# Set this equal to true if you want examples to be run.
+examples_enabled = False
+
+# Set this equal to true if you want tests to be run.
+tests_enabled = True
