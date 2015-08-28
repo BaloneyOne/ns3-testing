@@ -15,6 +15,10 @@
 :Socket
 :MpTcpMapping
 :MpTcpMappingTestSuite
+:Ipv4StaticRouting
+:Ipv4StaticRoutingHelper
+:LinuxStackHelper
+:ElfCache
 #:TraceHelper:PointToPointHelper
 #:ClockTest
 #:ClockPerfect
