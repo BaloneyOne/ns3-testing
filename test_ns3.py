@@ -3,7 +3,19 @@ import os
 import argparse
 import subprocess
 import importlib
+import logging
+# from tests import Test
+# import ns_tests.test as toto
+from ns_tests import *
 
+log = logging.getLogger("ns_tests.test")
+# logging.getLogger()
+log.setLevel(logging.DEBUG)
+# log.addHandler(logging.StreamHandler())
+log.addHandler(logging.FileHandler("test.log", mode="w"))
+
+# this serves just as a helper for me to remember what I am working on
+# can be removed anytime
 available_suites = [
     "tcp",
     "tcp-header",
@@ -21,53 +33,85 @@ available_suites = [
 ]
 
 
+# "/home/teto/ns3off"
+# "/home/teto/dce"
 
-ns3folder="/home/teto/ns3off"
-dce_folder="/home/teto/dce"
-
-
-parser = argparse.ArgumentParser(description="Helper to debug ns3/dce programs")
-
-# parser.add_argument("suite", choices=available_suites, help="Launch gdb")
-# parser.add_argument("project", type=str, choices=["dce", "ns3"], help="To which project does the test/example belong")
-# here it should be able to find on its own the type normally
-parser.add_argument("type", type=str, choices=["test", "example"], help="What kind of program do we have to launch")
-parser.add_argument("program", type=str, help="Name of the suite or exemple to run")
-
-args, unknown_args = parser.parse_known_args()
+# You need to define these environement variables else the program will crash
+ns3folder = os.environ["NS3_FOLDER"]
+dce_folder = os.environ["DCE_FOLDER"]
 
 
-suite = args.program
-suite = suite.replace('-', '_')
+def list_specialized_tests():
+    f = {}
+    for g in DefaultTest.__subclasses__(): 
+        print("subclass=", g)
+        for test in g.cover_tests():
+            # f.extend() to extend a list
+            f.update({test: g})
+    return f
+    # pass
 
 
-"""
-Now we get to choose what kind of test to launch
-if example/test starts with 'dce' then it's a DCE test.
-if we can find a file with a name matching the program to launch, then we load it
-"""
-# from tests import Test
-import ns_tests.test as toto
+def choose_correct_class(suite):
+    """
+    """
 
-test_class = toto.DefaultTest
-if suite.startswith('dce'):
-   test_class = toto.DceDefaultTest 
-# mod = importlib.import_module('tests.mptcp_tcp')
-# mod = __import__('tests.mptcp-tcp')
-# test = DefaultTest()
-# todo it later
-# todo get root folder
-# if os.path.exists("ns_tests/%s" % suite):
-    # #from tests.mptcp_tcp import Test
-    # # import tests.(args.suite).
-    # test_type = DefaultTest
-print(" class: ", dir(test_class))
-print(" class: ", toto.DefaultTest)
-working_directory = dce_folder if test_class.is_dce() else ns3folder 
+    available = list_specialized_tests()
+    print(available)
+    if suite in available:
+        return available[suite]
 
-test = test_class ( working_directory, args.type)
-# assuming there are more
-# test.run(ns3folder, sys.argv[1:])
-# print(sys.argv)
-#test.setup()
-test.run([args.program] + unknown_args)
+    if suite.startswith('dce'):
+        return DceDefaultTest 
+
+    return DefaultTest
+
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Helper to debug ns3/dce programs")
+
+    # parser.add_argument("suite", choices=available_suites, help="Launch gdb")
+    # parser.add_argument("project", type=str, choices=["dce", "ns3"], help="To which project does the test/example belong")
+    # here it should be able to find on its own the type normally
+    parser.add_argument("type", type=str, choices=["test", "example"], help="What kind of program do we have to launch")
+    parser.add_argument("program", type=str, help="Name of the suite or exemple to run")
+    parser.add_argument("--debug", '-d', action="store_true", help="Launch gdb")
+    parser.add_argument("--out", "-o", default="", action="store", help="redirect ns3 results output to a file")
+    parser.add_argument("--load-log", "-l", action="store", help="Load log from file")
+
+    args, unknown_args = parser.parse_known_args()
+
+    # maybe not needed anymore
+    suite = args.program
+    # suite = suite.replace('-', '_')
+
+    """
+    Now we get to choose what kind of test to launch
+    if example/test starts with 'dce' then it's a DCE test.
+    if we can find a file with a name matching the program to launch, then we load it
+    """
+
+    test_class = choose_correct_class(suite)
+
+    working_directory = dce_folder if test_class.is_dce() else ns3folder 
+
+    print("test_class", test_class)
+    print("working_directory", working_directory)
+    test = test_class(working_directory, args.type)
+    # assuming there are more
+    # test.run(ns3folder, sys.argv[1:])
+    # print(sys.argv)
+
+    if args.load_log:
+        ns_log = DefaultTest.load_log(args.load_log)
+        log.info("Setting NS_LOG to:\n%s" % ns_log)
+        os.environ['NS_LOG'] = ns_log
+
+    result = test.run(args.debug, args.out, [args.program] + unknown_args)
+
+    print("log written to [%s]" % "test.log")
+
+
+if __name__ == '__main__':
+    main()
