@@ -5,7 +5,7 @@ import argparse
 from . import test
 
 
-class Test(test.DefaultTest):
+class Test(test.DceDefaultTest):
 
     def get_parser(self):
         parser = self.get_default_parser()
@@ -16,7 +16,7 @@ class Test(test.DefaultTest):
     @staticmethod
     def cover_tests():
         return [
-            "dce-iperf-mptcp",
+            "dce-iperf-mptcp", 
             "dce-iperf-mptcp-mixed"
         ]
 

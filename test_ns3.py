@@ -67,13 +67,14 @@ def choose_correct_class(suite):
     return DefaultTest
 
 
-
 def main():
     parser = argparse.ArgumentParser(description="Helper to debug ns3/dce programs")
 
     # parser.add_argument("suite", choices=available_suites, help="Launch gdb")
+
     # parser.add_argument("project", type=str, choices=["dce", "ns3"], help="To which project does the test/example belong")
-    # here it should be able to find on its own the type normally
+    # project and type could be set via namedtuples in cover_tests 
+    # instead of setting it manually here
     parser.add_argument("type", type=str, choices=["test", "example"], help="What kind of program do we have to launch")
     parser.add_argument("program", type=str, help="Name of the suite or exemple to run")
     parser.add_argument("--debug", '-d', action="store_true", help="Launch gdb")
