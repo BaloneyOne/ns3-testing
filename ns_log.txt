@@ -18,7 +18,15 @@
 :Ipv4StaticRouting
 :Ipv4StaticRoutingHelper
 :LinuxStackHelper
-:ElfCache
+:IpProgramDceRouting
+:DceApplication
+:DceManager
+:SimuFd
+:SimuStdlib
+:CommandLine
+:DceIperfMpTcpMixed
+:UnixStreamSocketFd
+#:ElfCache
 #:TraceHelper:PointToPointHelper
 #:ClockTest
 #:ClockPerfect

@@ -71,7 +71,7 @@ class DefaultTest:
 
     @staticmethod
     def is_dce():
-        return True
+        return False
 
     def get_type(self):
         """ Is it a "test" or an "example" """
@@ -185,8 +185,11 @@ class DefaultTest:
 
             ret = subprocess.call(cmd, shell=True, cwd=self.get_waf_directory(), timeout=timeout if timeout else None)
 
-            log.info("Program finished, moving on to postprocessing....")
-            self._postprocess(**args_dict)
+            if ret == 0:
+                log.info("Command successful, moving on to postprocessing....")
+                self._postprocess(**args_dict)
+            else:
+                log.info("Command failed with errcode %d" % ret)
             # proc.wait(timeout=timeout if timeout else None)
         except subprocess.TimeoutExpired:
             log.error("Timeout expired. try setting a longer timeout")
@@ -195,11 +198,6 @@ class DefaultTest:
         finally:
             # will be done whatever the results
             pass
-
-        if ret:
-            print("ERROR: command returned error code %d" % ret)
-            # os.system("truncate --size=100000 %s" % (args.out,))
-            # exit(1)
 
         print("Executed Command:\n%s" % cmd)
         return ret

@@ -26,6 +26,9 @@ And that's all !
 The script relies on python's argparse library and as such should be self documented.
 
 Here is an example on how to launch an 'example' (replace by 'test' for a 'test')
-./test_ns3.py example dce-iperf-mptcp-mixed --clean --load-log=ns_log.txt
+$ ./test_ns3.py example dce-iperf-mptcp-mixed --clean --load-log=ns_log.txt
+
+or a more complex example for DCE mixing stacks:
+$ ~/ns3testing/test_ns3.py example dce-iperf-mptcp-mixed --clean --load-log=ns_log.txt --out=xp.log --nRtrs=1 --debug --ChecksumEnabled=1 --clientStack=linux --serverStack=linux
 
 For the ns_log.txt format, look at the one in this repository
