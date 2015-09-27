@@ -113,6 +113,11 @@ def main():
 
     print("log written to [%s]" % "test.log")
 
+    if result:
+        print("Program failed with result=%d" % result)
+        sys.exit(result)
+
+
 
 if __name__ == '__main__':
     main()

@@ -26,6 +26,8 @@
 :CommandLine
 :DceIperfMpTcpMixed
 :UnixStreamSocketFd
+:UnixSocketFd
+:DceNetDb
 #:ElfCache
 #:TraceHelper:PointToPointHelper
 #:ClockTest
