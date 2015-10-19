@@ -13,14 +13,19 @@ resFolder="results"
 
 mkdir -p "$resFolder"
 
+
+if [ -z "$NS_RUN" ]; then
+
+	print "\$NS_RUN not set"
+	exit 1
+fi
+
+
+export NS_GLOBAL_VALUE="ChecksumEnabled=1;RngRun=$NS_RUN"
+SUFFIX="${SUFFIX}-run${NS_RUN}"
+echo "NS_GLOBAL_VALUE=$NS_GLOBAL_VALUE"
 echo "SUFFIX=$SUFFIX"
 echo "PARAMS=$PARAMS"
-
-#gen_suffix ()
-#{
-	
-#}
-
 # expects source/destination
 copy_iperf_result ()
 {
