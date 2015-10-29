@@ -1,6 +1,7 @@
 *=error|warn|prefix_node|prefix_func
 #:MpTcpTestSuite # tests are not supposed to have a logger
 :MpTcpSchedulerRoundRobin
+:MpTcpSchedulerFastestRTT
 :Config
 :TcpSocket
 :MpTcpSubflow:MpTcpSocketBase

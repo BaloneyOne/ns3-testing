@@ -6,6 +6,12 @@
 # 
 export NS_GLOBAL_VALUE="ChecksumEnabled=1"
 #./unit_test.sh "linux_2rtrs_f30b30_f10b30_lia" --nRtrs=2 --clientStack=linux --serverStack=linux --forwardDelay0=30 --backwardDelay0=30 --forwardDelay1=10 --backwardDelay1=30 --scheduler="default" --window="40K"
+NS_RUN=1
+
+for RUN in $(seq 1 1)
+do
+# LINUX 1 router 
+export NS_RUN="$RUN"
 
 # NS 2 routers
 #./unit_test.sh "ns_2rtrs_f30b30_f30b30_w40K_lia" --nRtrs=2 --clientStack=ns --serverStack=ns --forwardDelay0=30 --backwardDelay0=30 --forwardDelay1=30 --backwardDelay1=30 --window="40K"
@@ -26,3 +32,5 @@ export NS_GLOBAL_VALUE="ChecksumEnabled=1"
 #./unit_test.sh "linux_2rtrs_f30b30_f50b30_lia" --nRtrs=2 --clientStack=linux --serverStack=linux --forwardDelay0=30 --backwardDelay0=30 --forwardDelay1=50 --backwardDelay1=30 
 #./unit_test.sh "linux_2rtrs_f30b30_f70b30_lia" --nRtrs=2 --clientStack=linux --serverStack=linux --forwardDelay0=30 --backwardDelay0=30 --forwardDelay1=70 --backwardDelay1=30 
 #./unit_test.sh "linux_2rtrs_f30b30_f1900b30_lia" --nRtrs=2 --clientStack=linux --serverStack=linux --forwardDelay0=30 --backwardDelay0=30 --forwardDelay1=90 --backwardDelay1=30 
+done
+
