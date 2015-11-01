@@ -1,9 +1,11 @@
 #!/bin/bash
 #NB_RTR=2
-BUFFER_SIZE=4
+#BUFFER_SIZE=4
 SUITE="dce-iperf-mptcp-mixed"
-SCHEDULER=""
-CC="lia"
+#SCHEDULER=""
+echo $@
+echo $0
+echo $1
 SUFFIX="$1"
 shift 1
 PARAMS="$@"
@@ -22,7 +24,7 @@ fi
 
 
 export NS_GLOBAL_VALUE="ChecksumEnabled=1;RngRun=$NS_RUN"
-SUFFIX="${SUFFIX}-run${NS_RUN}"
+#SUFFIX="${SUFFIX}-run${NS_RUN}"
 echo "NS_GLOBAL_VALUE=$NS_GLOBAL_VALUE"
 echo "SUFFIX=$SUFFIX"
 echo "PARAMS=$PARAMS"
