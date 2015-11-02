@@ -75,11 +75,20 @@ def run_test4(run):
   run_unit_test(run=run, clientStack=Stack.linux, serverStack=Stack.linux, window="80K")
   run_unit_test(run=run, clientStack=Stack.linux, serverStack=Stack.linux, window="140K")
 
+def run_test5(run):
+  # run_unit_test(run=run, clientStack=Stack.ns, serverStack=Stack.ns, window="40K")
+  run_unit_test(run=run, clientStack=Stack.linux, serverStack=Stack.linux, window="40K")
+    # Hybrid
+  # run_unit_test(run=run, clientStack=Stack.ns, serverStack=Stack.linux, window="40K")
+
+
+# list available generating functions
 tests = {
   'ns2': run_test2,
   'ns': run_test1,
   'linux': run_test3,
   'linux2': run_test4,
+  'test': run_test5,
 }
 
 
@@ -95,8 +104,6 @@ def main():
     tests[args.mode](run)
 
 
-    # Hybrid
-    # run_unit_test(run=run, clientStack=Stack.ns, serverStack=Stack.linux, window="140K")
 
 
 # ./unit_test.sh "ns_2rtrs_f30b30_f30b30_w40K_lia" --nRtrs=2 --clientStack=ns --serverStack=ns --forwardDelay0=30 --backwardDelay0=30 --forwardDelay1=30 --backwardDelay1=30 --window="40K"

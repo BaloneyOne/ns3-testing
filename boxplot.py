@@ -3,38 +3,38 @@ import pandas as pd
 import glob
 import matplotlib.pyplot as plt
 import argparse
+import logging
+
+logger = logging.getLogger()
+logger.addHandler(logging.StreamHandler())
+logger.setLevel(logging.INFO)
 
 configs = dict()
 
 configs[2] = [
-    {"file": "linux_linux_2nRtrs_f30b30_f30b30_w40K_lia_default-run*.csv",  "title": "Linux/40KB"},
-    {"file": "linux_linux_2nRtrs_f30b30_f30b30_w60K_lia_default-run*.csv",  "title": "Linux/60KB"},
-    {"file": "linux_linux_2nRtrs_f30b30_f30b30_w80K_lia_default-run*.csv",  "title": "Linux/80KB"},
-    {"file": "linux_linux_2nRtrs_f30b30_f30b30_w140K_lia_default-run*.csv", "title": "Linux/140KB"},
-    {"file": "ns_ns_2nRtrs_f30b30_f30b30_w40K_lia_default-run*.csv",  "title": "ns/40KB"},
-    {"file": "ns_ns_2nRtrs_f30b30_f30b30_w60K_lia_default-run*.csv",  "title": "ns/60KB"},
-    {"file": "ns_ns_2nRtrs_f30b30_f30b30_w80K_lia_default-run*.csv",  "title": "ns/80KB"},
-    {"file": "ns_ns_2nRtrs_f30b30_f30b30_w140K_lia_default-run*.csv", "title": "ns/140KB"},
+    {"file": "linux_2rtrs_f30b30_f30b30_w40K_lia-run*.csv",  "title": "Linux/40KB"},
+    {"file": "linux_2rtrs_f30b30_f30b30_w60K_lia-run*.csv",  "title": "Linux/60KB"},
+    {"file": "linux_2rtrs_f30b30_f30b30_w80K_lia-run*.csv",  "title": "Linux/80KB"},
+    {"file": "linux_2rtrs_f30b30_f30b30_w140K_lia-run*.csv", "title": "Linux/140KB"},
+    {"file": "ns_2rtrs_f30b30_f30b30_w40K_lia-run*.csv",  "title": "ns/40KB"},
+    {"file": "ns_2rtrs_f30b30_f30b30_w60K_lia-run*.csv",  "title": "ns/60KB"},
+    {"file": "ns_2rtrs_f30b30_f30b30_w80K_lia-run*.csv",  "title": "ns/80KB"},
+    {"file": "ns_2rtrs_f30b30_f30b30_w140K_lia-run*.csv", "title": "ns/140KB"},
 
-  # list(file="ns_2nRtrs_f30b30_f30b30_w40K_lia.csv", title="ns/2/40KB"),
-  # list(file="ns_2nRtrs_f30b30_f30b30_w60K_lia.csv", title="ns/2/60KB"),
-  # list(file="ns_2nRtrs_f30b30_f30b30_w80K_lia.csv", title="ns/2/80KB"),
-  # list(file="ns_2nRtrs_f30b30_f30b30_w140K_lia.csv", title="ns/2/140KB")
+  # list(file="ns_2rtrs_f30b30_f30b30_w40K_lia.csv", title="ns/2/40KB"),
+  # list(file="ns_2rtrs_f30b30_f30b30_w60K_lia.csv", title="ns/2/60KB"),
+  # list(file="ns_2rtrs_f30b30_f30b30_w80K_lia.csv", title="ns/2/80KB"),
+  # list(file="ns_2rtrs_f30b30_f30b30_w140K_lia.csv", title="ns/2/140KB")
 ]
 
-# just serves to test linux/ns communications
-configs[3] = [
-    {"file": "linux_linux_2nRtrs_f30b30_f30b30_w140K_lia_default-run*.csv", "title": "Linux/140KB"},
-  ]
-
 configs[1] = [
-  {"file":"linux_linux_1nRtrs_f30b30_f30b30_w40K_lia_default-run*.csv", "title":"Linux/ 40KB"},
-  {"file":"linux_linux_1nRtrs_f30b30_f30b30_w80K_lia_default-run*.csv", "title":"Linux/ 80KB"},
-  {"file":"linux_linux_1nRtrs_f30b30_f30b30_w140K_lia_default-run*.csv", "title":"Linux/140KB"},
+  {"file":"linux_1rtrs_f30b30_f30b30_w40K_lia-run*.csv", "title":"Linux/40KB"},
+  {"file":"linux_1rtrs_f30b30_f30b30_w80K_lia-run*.csv", "title":"Linux/80KB"},
+  {"file":"linux_1rtrs_f30b30_f30b30_w140K_lia-run*.csv", "title":"Linux/140KB"},
 
-  {"file":"ns_ns_1nRtrs_f30b30_f30b30_w40K_lia_default-run*.csv", "title":"ns/ 40KB"},
-  {"file":"ns_ns_1nRtrs_f30b30_f30b30_w80K_lia_default-run*.csv", "title":"ns/ 80KB"},
-  {"file":"ns_ns_1nRtrs_f30b30_f30b30_w140K_lia_default-run*.csv", "title":"ns/140KB"}
+  # {"file":"ns_1rtrs_f30b30_f30b30_w40K_lia-run*.csv", "title":"ns/1/40KB"},
+  # {"file":"ns_1rtrs_f30b30_f30b30_w80K_lia-run*.csv", "title":"ns/1/80KB"},
+  # {"file":"ns_1rtrs_f30b30_f30b30_w140K_lia-run*.csv", "title":"ns/1/140KB"}
 ]
 
 
@@ -59,10 +59,12 @@ for config in configs[args.nb_subflows]:
 result = pd.concat(frames,
                    ignore_index=True 
                    )
-print(result)
+# print(result)
 
 # fig = plt.figure()
 # result.groupby("title").bits_per_second.boxplot(by="title") # kind="box")
-ax = result.boxplot(column="bits_per_second", by="title", rot=45 )
+ax = result.boxplot(column="bits_per_second", by="title", title="hello world", rot=45 )
 fig = ax.get_figure()
-fig.savefig("boxplot_%d.png" % args.nb_subflows)
+output = "boxplot_%d.png" % args.nb_subflows
+fig.savefig(output)
+print("%s" % output)
