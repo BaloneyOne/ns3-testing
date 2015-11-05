@@ -3,23 +3,18 @@ import pandas as pd
 import glob
 import matplotlib.pyplot as plt
 import argparse
-import logging
-
-logger = logging.getLogger()
-logger.addHandler(logging.StreamHandler())
-logger.setLevel(logging.INFO)
 
 configs = dict()
 
 configs[2] = [
-    {"file": "linux_2rtrs_f30b30_f30b30_w40K_lia-run*.csv",  "title": "Linux/40KB"},
-    {"file": "linux_2rtrs_f30b30_f30b30_w60K_lia-run*.csv",  "title": "Linux/60KB"},
-    {"file": "linux_2rtrs_f30b30_f30b30_w80K_lia-run*.csv",  "title": "Linux/80KB"},
-    {"file": "linux_2rtrs_f30b30_f30b30_w140K_lia-run*.csv", "title": "Linux/140KB"},
-    {"file": "ns_2rtrs_f30b30_f30b30_w40K_lia-run*.csv",  "title": "ns/40KB"},
-    {"file": "ns_2rtrs_f30b30_f30b30_w60K_lia-run*.csv",  "title": "ns/60KB"},
-    {"file": "ns_2rtrs_f30b30_f30b30_w80K_lia-run*.csv",  "title": "ns/80KB"},
-    {"file": "ns_2rtrs_f30b30_f30b30_w140K_lia-run*.csv", "title": "ns/140KB"},
+    {"file": "linux_linux_2nRtrs_f30b30_f30b30_w40K_lia_default-run*.csv",  "title": "Linux/40KB"},
+    {"file": "linux_linux_2nRtrs_f30b30_f30b30_w60K_lia_default-run*.csv",  "title": "Linux/60KB"},
+    {"file": "linux_linux_2nRtrs_f30b30_f30b30_w80K_lia_default-run*.csv",  "title": "Linux/80KB"},
+    {"file": "linux_linux_2nRtrs_f30b30_f30b30_w140K_lia_default-run*.csv", "title": "Linux/140KB"},
+    {"file": "ns_ns_2nRtrs_f30b30_f30b30_w40K_lia_default-run*.csv",  "title": "ns/40KB"},
+    {"file": "ns_ns_2nRtrs_f30b30_f30b30_w60K_lia_default-run*.csv",  "title": "ns/60KB"},
+    {"file": "ns_ns_2nRtrs_f30b30_f30b30_w80K_lia_default-run*.csv",  "title": "ns/80KB"},
+    {"file": "ns_ns_2nRtrs_f30b30_f30b30_w140K_lia_default-run*.csv", "title": "ns/140KB"},
 
   # list(file="ns_2rtrs_f30b30_f30b30_w40K_lia.csv", title="ns/2/40KB"),
   # list(file="ns_2rtrs_f30b30_f30b30_w60K_lia.csv", title="ns/2/60KB"),
@@ -63,8 +58,9 @@ result = pd.concat(frames,
 
 # fig = plt.figure()
 # result.groupby("title").bits_per_second.boxplot(by="title") # kind="box")
-ax = result.boxplot(column="bits_per_second", by="title", title="hello world", rot=45 )
+ax = result.boxplot(column="bits_per_second", by="title", rot=45 )
 fig = ax.get_figure()
 output = "boxplot_%d.png" % args.nb_subflows
 fig.savefig(output)
-print("%s" % output)
+
+print(output)

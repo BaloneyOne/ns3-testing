@@ -33,17 +33,21 @@ def run_unit_test(
     scheduler=scheduler,
   )
 
+  # RngRun=
+  # os.environ['NS_RUN'] = str(run)
+  # os.environ['NS_GLOBAL_VALUE'] = "ChecksumEnabled=1"
+
   cmd = [ "./unit_test.sh", prefix, "--nRtrs=%d" % nRtrs, "--clientStack=%s" % clientStack.value, "--serverStack=%s" % serverStack.value, 
          "--forwardDelay0=%d" % forward0, "--forwardDelay1=%d" % forward1,
          "--backwardDelay0=%d" % backward0, "--backwardDelay1=%d" % backward1,
          "--scheduler=%s" % scheduler,
          "--window=%s" % window,
+        # these functions require the script to have a CmdParser else you need to export to the env
+         "--ChecksumEnabled=1",
+         "--RngRun=%d" % run,
          ]
   cmd = ' '.join(cmd)
   print("command= %s\n"% cmd)
-  os.environ['NS_RUN'] = str(run)
-  os.environ['NS_GLOBAL_VALUE'] = "ChecksumEnabled=1"
-
   # env = {'NS_GLOBAL_VALUE': "ChecksumEnabled=1", }
   proc = subprocess.call(cmd, shell=True)
   # os.system("./unit_test.sh"
@@ -75,12 +79,14 @@ def run_test4(run):
   run_unit_test(run=run, clientStack=Stack.linux, serverStack=Stack.linux, window="80K")
   run_unit_test(run=run, clientStack=Stack.linux, serverStack=Stack.linux, window="140K")
 
-def run_test5(run):
+def run_basic_linux(run):
   # run_unit_test(run=run, clientStack=Stack.ns, serverStack=Stack.ns, window="40K")
   run_unit_test(run=run, clientStack=Stack.linux, serverStack=Stack.linux, window="40K")
     # Hybrid
   # run_unit_test(run=run, clientStack=Stack.ns, serverStack=Stack.linux, window="40K")
 
+def run_basic_ns(run):
+  run_unit_test(run=run, clientStack=Stack.ns, serverStack=Stack.ns, window="40K")
 
 # list available generating functions
 tests = {
@@ -88,7 +94,8 @@ tests = {
   'ns': run_test1,
   'linux': run_test3,
   'linux2': run_test4,
-  'test': run_test5,
+  'basic_linux': run_basic_linux,
+  'basic_ns': run_basic_ns,
 }
 
 
