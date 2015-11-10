@@ -1,7 +1,7 @@
 #!/bin/sh
 
-singlePathFilter="results/1nRtrs*.pcap"
-multiPathFilter="results/*nRtrs*.pcap"
+singlePathFilter="results/*1nbRtrs*.pcap"
+multiPathFilter="results/*2nbRtrs*.pcap"
 #mkdir -p "results_img"
 for file in $multiPathFilter
 do

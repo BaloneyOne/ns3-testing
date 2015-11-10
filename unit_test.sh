@@ -23,11 +23,8 @@ mkdir -p "$resFolder"
 #fi
 
 
-#export NS_GLOBAL_VALUE="ChecksumEnabled=1;RngRun=$NS_RUN"
-#SUFFIX="${SUFFIX}-run${NS_RUN}"
-#echo "NS_GLOBAL_VALUE=$NS_GLOBAL_VALUE"
-echo "SUFFIX=$SUFFIX"
-echo "PARAMS=$PARAMS"
+#echo "SUFFIX=$SUFFIX"
+#echo "PARAMS=$PARAMS"
 # expects source/destination
 copy_iperf_result ()
 {
@@ -42,7 +39,9 @@ get_iperf_results_dir()
 	echo "$dir/stdout"
 }
 
-python3 ~/ns3testing/test_ns3.py example $SUITE --clean --load-log="ns_log.txt" --out="xp_$SUFFIX.log" $PARAMS 
+cmd="python3 ~/ns3testing/test_ns3.py example $SUITE --clean --load-log='ns_log.txt' --out='xp_$SUFFIX.log' $PARAMS "
+echo "$cmd"
+eval $cmd
 
 if [ $? -ne 0 ]; then
 	echo "Program failed with exit value '$?'"
@@ -52,7 +51,10 @@ fi
 # backup the results
 filename=$(get_iperf_results_dir)
 copy_iperf_result "$filename" "$resFolder/$SUFFIX.csv"
-mergecap $DCE_FOLDER/iperf-mptcp-0-*.pcap -w "$resFolder/iperf-client-$SUFFIX.pcap"
+pcapfilename="$resFolder/iperf-client-$SUFFIX.pcap"
+# we want the shell to expand this
+mergecap $DCE_FOLDER/iperf-mptcp-0-*.pcap -w "$pcapfilename"
+echo "Pcap saved to: $pcapfilename"
 
 #exit 0
 
