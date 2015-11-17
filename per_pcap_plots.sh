@@ -9,6 +9,6 @@ do
 	panda.py "$file" --regen plot TimeVsDsn 0 "${file}_dsn.png"
 	panda.py "$file" --regen plot LatencyHistogram 0 "${file}_latency.png"
 	# requires imagemagick
-	montage "results/${file}*.png" -geometry +1+1 "${file}_all.png"
+	montage ${file}*.png -geometry +1+1 "${file}_all.png"
 done
 
