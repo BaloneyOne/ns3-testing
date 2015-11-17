@@ -124,58 +124,68 @@ def run_unit_test(
     proc = subprocess.call(cmd, shell=True)
     # os.system("./unit_test.sh"
 
+# windows_small = ["10K","20K", "30K", "40K", "50K", "60K", "200K"]
+windows_small = ["10K", "30K", "60K", "400K"]
+windows_big = ["40K","60K", "80K", "140K", "400K", "1M" ]
 
 def run_ns_1(run):
-    confs = [
-        Config(run=run, nb_rtrs=1, client_stack=Stack.ns, server_stack=Stack.ns, window="40K"),
-        Config(run=run, nb_rtrs=1, client_stack=Stack.ns, server_stack=Stack.ns, window="60K"),
-        Config(run=run, nb_rtrs=1, client_stack=Stack.ns, server_stack=Stack.ns, window="80K"),
-        Config(run=run, nb_rtrs=1, client_stack=Stack.ns, server_stack=Stack.ns, window="140K")
-    ]
+    # confs = [
+        # Config(run=run, nb_rtrs=1, client_stack=Stack.ns, server_stack=Stack.ns, window="40K"),
+        # Config(run=run, nb_rtrs=1, client_stack=Stack.ns, server_stack=Stack.ns, window="60K"),
+        # Config(run=run, nb_rtrs=1, client_stack=Stack.ns, server_stack=Stack.ns, window="80K"),
+        # Config(run=run,  client_stack=Stack.ns, server_stack=Stack.ns, window="140K")
+    # ]
+    confs = [ Config(run=run, nb_rtrs=1, client_stack=Stack.ns, server_stack=Stack.ns, window=X) for X in windows_small ]
     return confs
 
 
 def run_ns_2(run):
-    return [
-        Config(run=run, client_stack=Stack.ns, server_stack=Stack.ns, window="40K"),
-        Config(run=run, client_stack=Stack.ns, server_stack=Stack.ns, window="60K"),
-        Config(run=run, client_stack=Stack.ns, server_stack=Stack.ns, window="80K"),
-        Config(run=run, client_stack=Stack.ns, server_stack=Stack.ns, window="140K"),
-        Config(run=run, client_stack=Stack.ns, server_stack=Stack.ns, window="400K"),
-        Config(run=run, client_stack=Stack.ns, server_stack=Stack.ns, window="1M"),
-    ]
+    # return [
+        # Config(run=run, client_stack=Stack.ns, server_stack=Stack.ns, window="40K"),
+        # Config(run=run, client_stack=Stack.ns, server_stack=Stack.ns, window="60K"),
+        # Config(run=run, client_stack=Stack.ns, server_stack=Stack.ns, window="80K"),
+        # Config(run=run, client_stack=Stack.ns, server_stack=Stack.ns, window="140K"),
+        # Config(run=run, client_stack=Stack.ns, server_stack=Stack.ns, window="400K"),
+        # Config(run=run, client_stack=Stack.ns, server_stack=Stack.ns, window="1M"),
+    # ]
+
+  return [ Config(run=run, client_stack=Stack.ns, server_stack=Stack.ns, window=X) for X in windows_small ]
 
 
 def run_linux_1(run):
-    return [
-        Config(run=run, nb_rtrs=1, client_stack=Stack.linux, server_stack=Stack.linux, window="40K"),
-        Config(run=run, nb_rtrs=1, client_stack=Stack.linux, server_stack=Stack.linux, window="60K"),
-        Config(run=run, nb_rtrs=1, client_stack=Stack.linux, server_stack=Stack.linux, window="80K"),
-        Config(run=run, nb_rtrs=1, client_stack=Stack.linux, server_stack=Stack.linux, window="140K")
-    ]
+    return [ Config(run=run, nb_rtrs=1, client_stack=Stack.linux, server_stack=Stack.linux, window=X) for X in windows_small ]
+    # return [
+        # Config(run=run, nb_rtrs=1, client_stack=Stack.linux, server_stack=Stack.linux, window="40K"),
+        # Config(run=run, nb_rtrs=1, client_stack=Stack.linux, server_stack=Stack.linux, window="60K"),
+        # Config(run=run, nb_rtrs=1, client_stack=Stack.linux, server_stack=Stack.linux, window="80K"),
+        # Config(run=run, nb_rtrs=1, client_stack=Stack.linux, server_stack=Stack.linux, window="140K")
+    # ]
 
 
 def run_linux_2(run):
-    return [
-        Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window="40K"),
-        Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window="60K"),
-        Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window="80K"),
-        Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window="140K"),
-        Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window="400K"),
-        Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window="1M"),
-    ]
+  # windows = ["40K","60K"]
+  return [ Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window=X) for X in windows_small ]
+
+    # return [
+        # Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window="40K"),
+        # Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window="60K"),
+        # Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window="80K"),
+        # Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window="140K"),
+        # Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window="400K"),
+        # Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window="1M"),
+    # ]
 
 
-def run_basic_linux(run):
+def run_basic_linux(run, nb=1):
   # run_unit_test(run=run, client_stack=Stack.ns, server_stack=Stack.ns, window="40K")
     return [
-        Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window="40K")
+        Config(run=run, nb_rtrs=nb, client_stack=Stack.linux, server_stack=Stack.linux, window="400K")
     ]
 
 
-def run_basic_ns(run):
+def run_basic_ns(run, nb=1):
     return [
-        Config(run=run, client_stack=Stack.ns, server_stack=Stack.ns, window="40K")
+        Config(run=run, nb_rtrs=nb, client_stack=Stack.ns, server_stack=Stack.ns, window="400K")
     ]
 
 

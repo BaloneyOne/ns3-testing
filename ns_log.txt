@@ -29,6 +29,7 @@
 :UnixStreamSocketFd
 :UnixSocketFd
 :DceNetDb
+:TcpCongestionOps
 #:ElfCache
 #:TraceHelper:PointToPointHelper
 #:ClockTest

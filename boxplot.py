@@ -10,7 +10,7 @@ configs = dict()
 
 
 def gen_title(conf: b.Config) -> str:
-    return "{0.client_stack.value}/{0.window:>3}".format(conf)
+    return "{0.client_stack.value}/{0.window:>4}".format(conf)
 
 def boxplot1():
     return b.run_ns_1("*") + b.run_linux_1("*")
@@ -84,8 +84,20 @@ result = pd.concat(frames,
 
 # fig = plt.figure()
 # result.groupby("title").bits_per_second.boxplot(by="title") # kind="box")
-ax = result.boxplot(column="bits_per_second", by="title", rot=45 )
+ax = result.boxplot(
+    column="bits_per_second", 
+    by="title",
+    # title="Throughput comparison between the linux and ns3 implementations", 
+    # xlabel=""
+    rot=45 
+)
 fig = ax.get_figure()
+plt.suptitle("Throughput comparison between the linux and ns3 implementations")
+# get rid of the automatic 'Boxplot grouped by group_by_column_name' title
+plt.title("")
+# plt.annotate("")
+ax.set_xlabel("")
+ax.set_ylabel("Bits per second")
 output = "boxplot_%d.png" % args.nb_subflows
 fig.savefig(output)
 

@@ -6,8 +6,9 @@ multiPathFilter="results/*2nbRtrs*.pcap"
 for file in $multiPathFilter
 do
 	echo "$file"
-	panda.py $file --regen plot TimeVsDsn 0 "$file.png"
+	panda.py "$file" --regen plot TimeVsDsn 0 "${file}_dsn.png"
+	panda.py "$file" --regen plot LatencyHistogram 0 "${file}_latency.png"
+	# requires imagemagick
+	montage "results/${file}*.png" -geometry +1+1 "${file}_all.png"
 done
 
-# requires imagemagick
-montage "results/*.png" -geometry +1+1 all.png
