@@ -71,7 +71,7 @@ class DefaultTest:
 
     @staticmethod
     def is_dce():
-        return True
+        return False
 
     def get_type(self):
         """ Is it a "test" or an "example" """

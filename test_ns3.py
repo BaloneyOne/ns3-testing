@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import sys
 import os
 import argparse
@@ -44,12 +45,11 @@ dce_folder = os.environ["DCE_FOLDER"]
 def list_specialized_tests():
     f = {}
     for g in DefaultTest.__subclasses__(): 
-        print("subclass=", g)
+        # print("subclass=", g)
         for test in g.cover_tests():
             # f.extend() to extend a list
             f.update({test: g})
     return f
-    # pass
 
 
 def choose_correct_class(suite):
@@ -112,6 +112,11 @@ def main():
     result = test.run(args.debug, args.out, [args.program] + unknown_args)
 
     print("log written to [%s]" % "test.log")
+
+    if result:
+        print("Program failed with result=%d" % result)
+        sys.exit(result)
+
 
 
 if __name__ == '__main__':

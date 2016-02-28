@@ -6,15 +6,17 @@ fi
 
 dir="$1"
 if ! [ -d "$dir" ]; then
-   dir="files-$1/var/log/*/"
+   dir="files-$1/var/log"
 fi
 
 echo "Directory: {$dir}"
 cli=""
-for i in $(ls $dir); do
-	cli="$cli <( echo '==== $i' ) $dir$i"
+#for i in $(ls $dir); do
+for i in $(find "$dir" -type f); do
+      #echo $i
+	cli="$cli <( echo '==== $i' ) $i"
 done 
 
-#echo -e "Command:\n$cli"
+echo -e "Command:\n$cli"
 eval "cat $cli |less"
 
