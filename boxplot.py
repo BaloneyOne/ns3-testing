@@ -92,8 +92,10 @@ ax = result.boxplot(
     rot=45 
 )
 fig = ax.get_figure()
-plt.suptitle("Throughput comparison between the linux and ns3 implementations")
+# plt.suptitle("Throughput comparison between the linux and ns3 implementations")
 # get rid of the automatic 'Boxplot grouped by group_by_column_name' title
+
+plt.suptitle("")
 plt.title("")
 # plt.annotate("")
 ax.set_xlabel("")

@@ -1,0 +1,7 @@
+Clock
+:ClockPerfect
+:DceNtpd
+:DceAdjtime
+:DceTime
+# for dce_gettimeofday we need Dce
+:Dce

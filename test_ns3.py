@@ -22,6 +22,7 @@ available_suites = [
     "tcp-header",
     "callback",
     "traced-callback",
+    "ipv4-forwarding",
     #"ns3-tcp-state",
     "mptcp-tcp",
     "mptcp-multi",

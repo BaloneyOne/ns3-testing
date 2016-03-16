@@ -160,7 +160,7 @@ class DefaultTest:
         log.debug("Just before running setup")
         self._setup(**args_dict)
 
-        extra_params = "--suite=%s" % args.program if self.type == "test" else ""
+        extra_params = "--suite=%s " % args.program if self.type == "test" else ""
         extra_params += ' '.join(list(unknown_args))
 
         if debug:
