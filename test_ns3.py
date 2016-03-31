@@ -12,8 +12,8 @@ from ns_tests import *
 log = logging.getLogger("ns_tests.test")
 # logging.getLogger()
 log.setLevel(logging.DEBUG)
-# log.addHandler(logging.StreamHandler())
-log.addHandler(logging.FileHandler("test.log", mode="w"))
+log.addHandler(logging.StreamHandler())
+# log.addHandler(logging.FileHandler("test.log", mode="w"))
 
 # this serves just as a helper for me to remember what I am working on
 # can be removed anytime
@@ -97,6 +97,9 @@ def main():
     test_class = choose_correct_class(suite)
 
     working_directory = dce_folder if test_class.is_dce() else ns3folder 
+
+    print("ns3 in %s" % ns3folder)
+    print("dce in %s" % dce_folder)
 
     print("test_class", test_class)
     print("working_directory", working_directory)
