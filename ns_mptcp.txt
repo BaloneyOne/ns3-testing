@@ -2,6 +2,7 @@
 #:MpTcpTestSuite # tests are not supposed to have a logger
 :MpTcpSchedulerRoundRobin
 :MpTcpSchedulerFastestRTT
+:MpTcpCongestionLia
 :Config
 :TcpSocket
 :MpTcpSubflow:MpTcpSocketBase
@@ -29,6 +30,7 @@
 :UnixStreamSocketFd
 :UnixSocketFd
 :DceNetDb
+:MpTcpMultiSuite
 :TcpCongestionOps
 #:ElfCache
 #:TraceHelper:PointToPointHelper
