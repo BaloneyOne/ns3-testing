@@ -134,39 +134,46 @@ ss_plots = [
 
 ]
 
+
 def plot(node, attribute, with_meta : bool, with_subflows : bool, output ):
     """
     Plot column "attribute" to "output" file (*.png)
 
-
     """
-    fig = plt.figure(figsize=(8,8))
+    log.info("Plotting attribute [%s]" % attribute)
+    fig = plt.figure (figsize=(8,8))
     ax = fig.gca()
     legends = []
     configs = []
 
     if with_meta:
         log.debug ("With meta")
-        configs.append ( Config(str(node) + "*meta*.csv"), "meta")
+        # pattern type
+        configs.append ( (str(node) + "*meta*.csv", "meta") )
 
     if with_subflows:
 
         log.debug ("With subflows")
-        configs.append ( Config(str(node) + "*subflow*.csv"), "Subflow")
+        configs.append ( (str(node) + "*subflow*.csv", "Subflow") )
 
 
-    for config in configs:
+    for pattern, name in configs:
 
-        matches = glob.glob(config.pattern)
+        folder = "/home/teto/ns3off2"
+        matches = glob.glob( folder + "/" + pattern)
         if matches is None:
             raise Exception("No meta file found")
-        d = pd.read_csv(filename , index_col="Time")
-        print(d)
+
+        for filename in matches:
+            print(filename)
+            d = pd.read_csv(filename , index_col="Time")
+            print( "prefix name=", attributes[attribute] )
+            print(d[ attribute] )
 # TODO augmenter la police
-        ax = d[ attributes[attribute] ].plot.line(ax=ax, grid=True, lw=3)
+            ax = d[ attribute ].plot.line(ax=ax, grid=True, lw=3)
 # ax = d2["newUnackSequence"].plot.line(ax=ax)
         # TODO retrieve legend from attributes + type
-        legends.append( "toto")
+            legends.append( attributes[attribute].format(type=name))
 
     plt.legend(legends)
     fig.savefig(output)
@@ -187,7 +194,7 @@ def main():
     parser.add_argument("--subflows", "-s", action="store_true", default=False, help="Plot subflows along")
 
     args, unknown = parser.parse_known_args()
-
+    print("Unknown args")
     output = args.out
 
     for node in [0,1]:
@@ -199,6 +206,9 @@ def main():
 
              
         plot (node, args.attribute, args.meta, args.subflows, output)
+
+        if args.display:
+            os.system("sxiv %s" % output)
 # plt.title("Highest Tx vs NextTx")
 # plot_tx(args.folder, gen_configs(2, False, gen_cwnd_config), "subflows_cwnd.png")
 # plot_tx(args.folder, gen_configs(0, True, gen_cwnd_config), "meta_cwnd.png")
@@ -220,8 +230,6 @@ def main():
         cmd = "montage tx_meta.png tx_subflows.png meta_rx.png subflows_rx.png meta_cwnd.png subflows_cwnd.png meta_rwnd.png -tile 2x4 -geometry +1+1 %s" % (args.out)
         subprocess.call( shlex.split(cmd),)
 
-        if args.display:
-            os.system("sxiv %s" % args.out)
 # montage for both nodes
 # montage server_recap.png source_recap.png -tile 2x1 -geometry +1+1 all.png 
 
