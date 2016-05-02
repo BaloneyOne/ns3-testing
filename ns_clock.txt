@@ -5,3 +5,8 @@ Clock
 :DceTime
 # for dce_gettimeofday we need Dce
 :Dce
+:DefaultSimulatorImpl
+:Node
+:Clock
+:EventId
+:Simulator
