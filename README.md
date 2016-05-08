@@ -32,3 +32,13 @@ or a more complex example for DCE mixing stacks:
 $ ~/ns3testing/test_ns3.py example dce-iperf-mptcp-mixed --clean --load-log=ns_log.txt --out=xp.log --nRtrs=1 --debug --ChecksumEnabled=1 --clientStack=linux --serverStack=linux
 
 For the ns_log.txt format, look at the one in this repository
+
+
+
+MPTCP tests procedure
+===
+
+1. Run ./batch.py ns ns2 linux linux2 (which will run unit_test.sh -> test_ns3
+   and merge pcaps from same node)
+#. then ./per_pcap_plot.sh to generate per pcap
+#. boxplot.py to generate boxplots

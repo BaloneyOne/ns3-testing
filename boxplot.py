@@ -10,7 +10,10 @@ configs = dict()
 
 
 def gen_title(conf: b.Config) -> str:
-    return "{0.client_stack.value}/{0.window:>4}".format(conf)
+    """
+    Those are "B"ytes !
+    """
+    return "{0.client_stack.value}/{0.window:>4}B".format(conf)
 
 def boxplot1():
     return b.run_ns_1("*") + b.run_linux_1("*")

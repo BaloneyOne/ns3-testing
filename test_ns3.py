@@ -13,7 +13,10 @@ log = logging.getLogger("ns_tests.test")
 # logging.getLogger()
 log.setLevel(logging.DEBUG)
 log.addHandler(logging.StreamHandler())
-# log.addHandler(logging.FileHandler("test.log", mode="w"))
+
+
+log_filename = "test.log"
+log.addHandler(logging.FileHandler(log_filename, mode="w"))
 
 # this serves just as a helper for me to remember what I am working on
 # can be removed anytime
@@ -115,7 +118,7 @@ def main():
 
     result = test.run(args.debug, args.out, [args.program] + unknown_args)
 
-    print("log written to [%s]" % "test.log")
+    print("log written to [%s]" % log_filename)
 
     if result:
         print("Program failed with result=%d" % result)
