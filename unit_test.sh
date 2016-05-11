@@ -40,7 +40,7 @@ get_iperf_results_dir()
 	echo "$dir/stdout"
 }
 
-cmd="python3 ~/ns3testing/test_ns3.py example $SUITE --clean --load-log='ns_log.txt' --out='xp_$SUFFIX.log' $PARAMS "
+cmd="python3 ~/ns3testing/test_ns3.py example $SUITE --clean --load-log='ns_mptcp.txt' --out='xp_$SUFFIX.log' $PARAMS "
 echo "$cmd"
 eval $cmd
 
