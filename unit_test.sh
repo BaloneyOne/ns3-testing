@@ -30,6 +30,7 @@ copy_iperf_result ()
 {
 
 	echo "timestamp,source_address,source_port,destination_address,destination_port,interval,transferred_bytes,bits_per_second" > "$2"
+	# TODO remove last line
 	cat "$1" >> "$2" 
 }
 
@@ -39,7 +40,7 @@ get_iperf_results_dir()
 	echo "$dir/stdout"
 }
 
-cmd="python3 ~/ns3testing/test_ns3.py example $SUITE --clean --load-log='ns_log.txt' --out='xp_$SUFFIX.log' $PARAMS "
+cmd="python3 ~/ns3testing/test_ns3.py example $SUITE --clean --load-log='ns_mptcp.txt' --out='xp_$SUFFIX.log' $PARAMS "
 echo "$cmd"
 eval $cmd
 
@@ -52,6 +53,9 @@ fi
 filename=$(get_iperf_results_dir)
 copy_iperf_result "$filename" "$resFolder/$SUFFIX.csv"
 pcapfilename="$resFolder/iperf-client-$SUFFIX.pcap"
+
+# TODO should also copy/move cwnd files etc...
+
 # we want the shell to expand this
 mergecap $DCE_FOLDER/iperf-mptcp-0-*.pcap -w "$pcapfilename"
 echo "Pcap saved to: $pcapfilename"

@@ -94,9 +94,10 @@ def run_unit_test(
     # assert isinstance(server_stack, Stack)
     # conf = Config(client_stack, server_stack, window, run, cc, scheduler, nb_rtrs, forward0, backward0, forward1, backward1)
 
+    logger.info("Running unit_test")
     print(dir(conf))
     print(conf.client_stack)
-    print(conf._asdict())
+    # print(conf._asdict())
     # todo check the export of NS_RUN is correct ?
     # prefix = gen_filename(client_stack, server_stack, window, run, cc, scheduler, nb_rtrs, forward0, backward0, forward1, backward1)
     prefix = gen_filename(conf)
@@ -108,21 +109,20 @@ def run_unit_test(
     cmd = [
         "./unit_test.sh", prefix, 
         "--nRtrs=%d" % conf.nb_rtrs, 
-        "--client_stack=%s" % conf.client_stack.value, 
-        "--server_stack=%s" % conf.server_stack.value, 
+        "--clientStack=%s" % conf.client_stack.value, 
+        "--serverStack=%s" % conf.server_stack.value, 
         "--forwardDelay0=%d" % conf.forward0, "--forwardDelay1=%d" % conf.forward1,
         "--backwardDelay0=%d" % conf.backward0, "--backwardDelay1=%d" % conf.backward1,
         "--scheduler=%s" % conf.scheduler,
         "--window=%s" % conf.window,
-        # these functions require the script to have a CmdParser else you need to export to the env
+        # these functions require the script to have a CmdParser in the ns3 program else you need to export to the env
         "--ChecksumEnabled=1",
         "--RngRun=%d" % conf.run,
     ]
     cmd = ' '.join(cmd)
-    print("command= %s\n" % cmd)
+    logger.debug("command= %s\n" % cmd)
     # env = {'NS_GLOBAL_VALUE': "ChecksumEnabled=1", }
     proc = subprocess.call(cmd, shell=True)
-    # os.system("./unit_test.sh"
 
 # windows_small = ["10K","20K", "30K", "40K", "50K", "60K", "200K"]
 windows_small = ["10K", "30K", "60K", "400K"]
@@ -218,15 +218,16 @@ tests = {
 
 def main():
   parser = argparse.ArgumentParser(description="To run xp")
-  parser.add_argument('mode', choices=tests.keys())
+  parser.add_argument('mode', choices=tests.keys(), action="append", default=[])
   # parser.add_argument('--seed')
   argcomplete.autocomplete(parser)
   args = parser.parse_args()
   # nb_of_runs
   for run in range(1):
     # os.environ['NS_RUN'] = str(run)
-    for config in tests[args.mode](run):
-        run_unit_test(config)
+    for mode in args.mode:
+        for config in tests[mode](run):
+            run_unit_test(config)
 
 
 if __name__ == '__main__':
