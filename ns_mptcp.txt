@@ -50,7 +50,9 @@
 # NS_LOG += ":Config"
 # NS_LOG += ":TypeId" # to look for AddTraceSource
 #NS_LOG += ":MpTcpMapping"
-# NS_LOG += ":PcapFile"
+# apparemment y aun mismatch des tailles de paquets
+#:PcapFile
+#:PcapFileWrapper
 #prefix_func:Socket=*"
 #NS_LOG += ":Ipv4EndPoint"
 # NS_LOG += ":Ipv4EndPointDemux"
