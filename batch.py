@@ -65,18 +65,6 @@ def gen_filename(
 ) -> str:
     prefix = "{c.client_stack.value}_{c.server_stack.value}_{c.nb_rtrs}nbRtrs_f{c.forward0}b{c.backward0}_f{c.forward1}b{c.backward1}_w{c.window}_{c.cc}_{c.scheduler}-run{c.run}".format(
         c=conf
-        # ._asdict()
-        # client_stack=client_stack.value,
-        # server_stack=server_stack.value,
-        # forward0=forward0,
-        # forward1=forward1,
-        # backward0=backward0,
-        # backward1=backward1,
-        # cc=cc,
-        # window=window,
-        # nb_rtrs=nb_rtrs,
-        # run=run,
-        # scheduler=scheduler,
     )
     return prefix
 
@@ -109,8 +97,8 @@ def run_unit_test(
     cmd = [
         "./unit_test.sh", prefix, 
         "--nRtrs=%d" % conf.nb_rtrs, 
-        "--clientStack=%s" % conf.client_stack.value, 
-        "--serverStack=%s" % conf.server_stack.value, 
+        "--client_stack=%s" % conf.client_stack.value, 
+        "--server_stack=%s" % conf.server_stack.value, 
         "--forwardDelay0=%d" % conf.forward0, "--forwardDelay1=%d" % conf.forward1,
         "--backwardDelay0=%d" % conf.backward0, "--backwardDelay1=%d" % conf.backward1,
         "--scheduler=%s" % conf.scheduler,
@@ -163,17 +151,10 @@ def run_linux_1(run):
 
 
 def run_linux_2(run):
-  # windows = ["40K","60K"]
   return [ Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window=X) for X in windows_small ]
 
-    # return [
-        # Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window="40K"),
-        # Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window="60K"),
-        # Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window="80K"),
-        # Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window="140K"),
-        # Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window="400K"),
-        # Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window="1M"),
-    # ]
+def run_linux_2_test(run):
+  return [ Config(run=run, client_stack=Stack.linux, server_stack=Stack.linux, window="40K") ]
 
 
 def run_basic_linux(run, nb=1):
@@ -209,6 +190,7 @@ tests = {
     'ns': run_ns_1,
     'linux': run_linux_1,
     'linux2': run_linux_2,
+    'linux2_test': run_linux_2_test,
     'basic_linux': run_basic_linux,
     'basic_ns': run_basic_ns,
     'hybrid1': run_hybrid1,
@@ -219,8 +201,11 @@ tests = {
 def main():
   parser = argparse.ArgumentParser(description="To run xp")
   parser.add_argument('mode', choices=tests.keys(), action="append", default=[])
+  parser.add_argument('--interactive', '-i', action="store_true", default=False, 
+    help="When enabled, program will pause waiting for user input")
   # parser.add_argument('--seed')
   argcomplete.autocomplete(parser)
+  # TODO pass unknown args to subprocess ?
   args = parser.parse_args()
   # nb_of_runs
   for run in range(1):
@@ -228,6 +213,8 @@ def main():
     for mode in args.mode:
         for config in tests[mode](run):
             run_unit_test(config)
+            if args.interactive:
+                s = input("Press any key to resume")
 
 
 if __name__ == '__main__':

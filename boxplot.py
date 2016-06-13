@@ -61,6 +61,7 @@ configs[1] = boxplot1()
 
 parser = argparse.ArgumentParser(description='Generate boxplots for MPTCP simulations')
 parser.add_argument('nb_subflows', type=int, action="store", choices=configs.keys())
+parser.add_argument('--display', '-d', action="store_true", default=False,  help="")
 #range(1, len(configs)))
 
 args = parser.parse_args()
@@ -77,7 +78,9 @@ for config in configs[args.nb_subflows]:
         print("loading %s" % filename)
         df = pd.read_csv(filename)
         # TODO generer le titre
-        df["title"] = gen_title(config)
+        title = gen_title(config)
+        print ("Adding %d items with title [%s]" % (len(df),title))
+        df["title"] = title
         frames.append(df,)
 # print(frames)
 result = pd.concat(frames,
@@ -85,8 +88,11 @@ result = pd.concat(frames,
                    )
 # print(result)
 
+# When grouping with by, a dict mapping columns to return_type is returned
 # fig = plt.figure()
+# print( type(fig.gca()))
 # result.groupby("title").bits_per_second.boxplot(by="title") # kind="box")
+# matplotlib.axes._subplots.AxesSubplot
 ax = result.boxplot(
     column="bits_per_second", 
     by="title",
@@ -97,7 +103,7 @@ ax = result.boxplot(
 fig = ax.get_figure()
 # plt.suptitle("Throughput comparison between the linux and ns3 implementations")
 # get rid of the automatic 'Boxplot grouped by group_by_column_name' title
-
+print( type(ax))
 plt.suptitle("")
 plt.title("")
 # plt.annotate("")
@@ -105,5 +111,8 @@ ax.set_xlabel("")
 ax.set_ylabel("Bits per second")
 output = "boxplot_%d.png" % args.nb_subflows
 fig.savefig(output)
+
+if args.display:
+    plt.show()
 
 print(output)

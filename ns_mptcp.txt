@@ -1,4 +1,5 @@
 *=error|warn|prefix_node|prefix_func
+:Simulator
 #:MpTcpTestSuite # tests are not supposed to have a logger
 :MpTcpSchedulerRoundRobin
 :MpTcpSchedulerFastestRTT
@@ -45,16 +46,16 @@
 #:DropTailQueue
 #:Node
 #NS_LOG += ":AttributeValue"
-#NS_LOG += ":MpTcpSchedulerRoundRobin"
-# NS_LOG += ":SimpleNetDevice"
+# :SimpleNetDevice
 # NS_LOG=":TcpOptionMpTcp=*"
 # NS_LOG=":MpTcpOptionsTestSuite=*"
 # NS_LOG += ":Config"
 # NS_LOG += ":TypeId" # to look for AddTraceSource
 #NS_LOG += ":MpTcpMapping"
-:PcapFile
-:PcapFileWrapper
+# NS_LOG += ":PcapFile"
+# apparemment y aun mismatch des tailles de paquets
+#:PcapFile
+#:PcapFileWrapper
 #prefix_func:Socket=*"
 #NS_LOG += ":Ipv4EndPoint"
 # NS_LOG += ":Ipv4EndPointDemux"
-#NS_LOG="*"
