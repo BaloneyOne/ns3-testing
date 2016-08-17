@@ -5,6 +5,7 @@ import logging
 import os
 import glob
 import shutil
+import tempfile
 
 # parser = argparse.ArgumentParser()
 
@@ -158,46 +159,55 @@ class DefaultTest:
         #     os.environ['NS_LOG'] = ns_log
 
         log.debug("Just before running setup")
-        self._setup(**args_dict)
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            self._setup(**args_dict)
 
-        extra_params = "--suite=%s " % args.program if self.type == "test" else ""
-        extra_params += ' '.join(list(unknown_args))
+            extra_params = "--suite=%s " % args.program if self.type == "test" else ""
+            extra_params += ' '.join(list(unknown_args))
+            extra_params += " --tempdir=%s" % tmpdirname
 
-        if debug:
-            cmd = "./waf --run {program} --command-template=\"gdb -ex 'run {extra_params} {tofile}' --args %s \" "
-        else:
-            timeout = 200
-            cmd = "./waf --run \"{program} {extra_params} \" {tofile}"
-
-        tofile = " > %s 2>&1" % redirect if redirect else ""
-        cmd = cmd.format(
-            extra_params=extra_params,
-            program="test-runner" if self.type == "test" else args.program,
-            tofile=tofile,
-            fullness="QUICK",
-        )
-
-        log.debug("Changing working directory to %s" % (self.get_waf_directory()))
-        log.info(cmd)
-        print("Executed Command:\n%s" % cmd)
-        ret = 0
-        try:
-
-            ret = subprocess.call(cmd, shell=True, cwd=self.get_waf_directory(), timeout=timeout if timeout else None)
-
-            if ret == 0:
-                log.info("Command successful, moving on to postprocessing....")
-                self._postprocess(**args_dict)
+            if debug:
+                cmd = "{binary} --run {program} --command-template=\"gdb -ex 'run {extra_params} {tofile}' --args %s \" "
             else:
-                log.info("Command failed with errcode %d" % ret)
-            # proc.wait(timeout=timeout if timeout else None)
-        except subprocess.TimeoutExpired:
-            log.error("Timeout expired. try setting a longer timeout")
-        except Exception as e:
-            log.error(e)
-        finally:
-            # will be done whatever the results
-            pass
+                timeout = 200
+                cmd = "{binary} --run \"{program} {extra_params} \" {tofile}"
+
+            tofile = " > %s 2>&1" % redirect if redirect else ""
+            cmd = cmd.format(
+                binary="./waf --cwd=%s" %tmpdirname  ,
+                # binary=os.path.join(self.get_waf_directory(), "waf") + " --cwnd=%s" % self.get_waf_directory(),
+                extra_params=extra_params,
+                program="test-runner" if self.type == "test" else args.program,
+                tofile=tofile,
+                fullness="QUICK",
+            )
+
+            log.debug("Changing working directory to %s" % (self.get_waf_directory()))
+            log.info(cmd)
+            print("Executed Command:\n%s" % cmd)
+            ret = 0
+            try:
+
+#self.get_waf_directory()
+                ret = subprocess.call(cmd,
+                        shell=True, 
+                        cwd=self.get_waf_directory(), 
+                        timeout=timeout if timeout else None)
+
+
+                if ret == 0:
+                    log.info("Command successful, moving on to postprocessing....")
+                    self._postprocess(**args_dict)
+                else:
+                    log.info("Command failed with errcode %d" % ret)
+                # proc.wait(timeout=timeout if timeout else None)
+            except subprocess.TimeoutExpired:
+                log.error("Timeout expired. try setting a longer timeout")
+            except Exception as e:
+                log.error(e)
+            finally:
+                # will be done whatever the results
+                pass
 
         print("Executed Command:\n%s" % cmd)
         return ret
