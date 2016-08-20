@@ -23,10 +23,10 @@ class DefaultTest:
 
     # parser = None
 
-    def __init__(self, working_directory, type):
+    def __init__(self, working_directory, prog_type):
 
         self.wd = working_directory
-        self.type = type
+        self.type = prog_type
         # self.parser = parser
         log.info("created instance of %r" % self) 
         self.init()
@@ -162,21 +162,30 @@ class DefaultTest:
         with tempfile.TemporaryDirectory() as tmpdirname:
             self._setup(**args_dict)
 
-            extra_params = "--suite=%s " % args.program if self.type == "test" else ""
-            extra_params += ' '.join(list(unknown_args))
-            extra_params += " --tempdir=%s" % tmpdirname
+            prog_params = ""
+            waf_params = ""
+            if self.type == "test":
+                prog_params = "--suite=%s " % args.program  
+                prog_params += " --tempdir=%s" % tmpdirname
+                waf_params += " --cwd=%s" %tmpdirname  
+            else:
+                # waf_params += " --cwd=%s" % self.DCE_FOLDER  
+                pass
+
+            prog_params += ' '.join(list(unknown_args))
 
             if debug:
-                cmd = "{binary} --run {program} --command-template=\"gdb -ex 'run {extra_params} {tofile}' --args %s \" "
+                cmd = "{binary} {waf_params} --run {program} --command-template=\"gdb -ex 'run {prog_params} {tofile}' --args %s \" "
             else:
                 timeout = 200
-                cmd = "{binary} --run \"{program} {extra_params} \" {tofile}"
+                cmd = "{binary} {waf_params} --run \"{program} {prog_params} \" {tofile}"
 
             tofile = " > %s 2>&1" % redirect if redirect else ""
             cmd = cmd.format(
-                binary="./waf --cwd=%s" %tmpdirname  ,
+                binary="./waf ",
+                waf_params=waf_params,
                 # binary=os.path.join(self.get_waf_directory(), "waf") + " --cwnd=%s" % self.get_waf_directory(),
-                extra_params=extra_params,
+                prog_params=prog_params,
                 program="test-runner" if self.type == "test" else args.program,
                 tofile=tofile,
                 fullness="QUICK",
