@@ -101,8 +101,8 @@ def main():
 
     working_directory = dce_folder if test_class.is_dce() else ns3folder 
 
-    print("ns3 in %s" % ns3folder)
-    print("dce in %s" % dce_folder)
+    print("NS3_FOLDER=%s" % ns3folder)
+    print("DCE_FOLDER=%s" % dce_folder)
 
     print("test_class", test_class)
     print("working_directory", working_directory)
