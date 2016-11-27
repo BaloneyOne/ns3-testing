@@ -2,8 +2,6 @@
 import sys
 import os
 import argparse
-import subprocess
-import importlib
 import logging
 # from tests import Test
 # import ns_tests.test as toto
@@ -72,14 +70,24 @@ def choose_correct_class(suite):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Helper to debug ns3/dce programs")
+    parser = argparse.ArgumentParser(
+        description="""
+        Helper to debug ns3/dce programs.
+        
+        You should set NS3_FOLDER and DCE_FOLDER in your env.
+        To get more detailed errors, you can also set:
+            NS_LOG="*=error"
+        """
+        
+        )
 
     # parser.add_argument("suite", choices=available_suites, help="Launch gdb")
 
     # parser.add_argument("project", type=str, choices=["dce", "ns3"], help="To which project does the test/example belong")
     # project and type could be set via namedtuples in cover_tests 
     # instead of setting it manually here
-    parser.add_argument("type", type=str, choices=["test", "example"], help="What kind of program do we have to launch")
+    parser.add_argument("type", type=str, choices=["test", "example"], 
+            help="What kind of program do we have to launch")
     parser.add_argument("program", type=str, help="Name of the suite or exemple to run")
     parser.add_argument("--debug", '-d', action="store_true", help="Launch gdb")
     parser.add_argument("--out", "-o", default="", action="store", help="redirect ns3 results output to a file")
